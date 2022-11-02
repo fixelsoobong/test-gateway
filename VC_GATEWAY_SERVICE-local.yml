@@ -19,7 +19,7 @@ spring:
         wiretap: true
       routes:
         - id: msc-v2
-          uri: http://localhost:9998/
+          uri: http://127.0.0.1:9998/
           predicates:
             - Path=/mysc_v2/**
           filters:
@@ -28,52 +28,7 @@ spring:
               args:
                 name: vc-api-fallback
                 fallbackuri: forward:/vcApiFallBack
-
-        - id: vcapp-api-instance
-          uri: lb://vcapp-api-instance
-          predicates:
-            - Path=/myvc/**
-          filters:
-            - CustomAuthFilter
-            - name: CircuitBreaker
-              args:
-                name: vc-api-fallback
-                fallbackuri: forward:/vcApiFallBack
-        - id: demo
-          uri: lb://demo
-          predicates:
-            - Path=/demo/**
-          filters:
-            - CustomAuthFilter
-            - name: Hystrix
-              args:
-                name: vc-api-fallback
-                fallbackuri: forward:/vcApiFallBack
-        - id: vc-msc
-          uri: http://localhost:9998/
-          predicates:
-            - Path=/msc/**
-          filters:
-            - RewritePath=/vc_msc/(?<path>.*), /$\{path}
-            - CustomAuthFilter
-            - name: Hystrix
-              args:
-                name: vc-api-fallback
-                fallbackuri: forward:/vcApiFallBack
-                         
-        - id: mvc-app
-          uri: http://localhost:8101/
-          predicates:
-            - Path=/mvc_app/**
-          filters:
-            - CustomAuthFilter
-            - name: RequestSize
-              args: 
-                maxSize : 10000000
-            - name: Hystrix
-              args:
-                name: vc-api-fallback
-                fallbackuri: forward:/vcApiFallBack         
+                
 eureka:
   client:
     register-with-eureka: true
