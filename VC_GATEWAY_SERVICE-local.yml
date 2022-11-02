@@ -50,7 +50,7 @@ spring:
                 name: vc-api-fallback
                 fallbackuri: forward:/vcApiFallBack
         - id: vc-msc
-          uri: lb://VC-MSC
+          uri: localhost:9998/
           predicates:
             - Path=/msc/**
           filters:
