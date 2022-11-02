@@ -19,7 +19,7 @@ spring:
         wiretap: true
       routes:
         - id: msc-v2
-          uri: localhost:9998/
+          uri: http://localhost:9998/
           predicates:
             - Path=/mysc_v2/**
           filters:
@@ -50,7 +50,7 @@ spring:
                 name: vc-api-fallback
                 fallbackuri: forward:/vcApiFallBack
         - id: vc-msc
-          uri: localhost:9998/
+          uri: http://localhost:9998/
           predicates:
             - Path=/msc/**
           filters:
