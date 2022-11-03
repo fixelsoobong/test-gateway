@@ -19,16 +19,19 @@ spring:
         httpserver:
           wiretap: true
       routes:
-        - id: vcAppApi
-          uri: lb://vcAppApi
+        - id: mysc-api-instance
+          uri: http://localhost:9999
           predicates:
-            - Path=/api/**
+            - Path=/mysc/**
           filters:
             - CustomAuthFilter
-            - name: CircuitBreaker
+            - name: RequestSize
+              args:
+                maxSize: 50000000
+            - name: Hystrix
               args:
                 name: vc-api-fallback
-                fallbackuri: forward:/vcApiFallBack    
+                fallbackuri: forward:/vcApiFallBack
 eureka:
   client:
     register-with-eureka: true
