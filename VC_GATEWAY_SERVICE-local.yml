@@ -19,7 +19,7 @@ spring:
         wiretap: true
       routes:
         - id: mysc_v2
-          uri: http://127.0.0.1:9998/
+          uri: http://localhost:9998/
           predicates:
             - Path=/mysc_v2/**
           filters:
