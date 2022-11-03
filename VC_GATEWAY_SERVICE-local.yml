@@ -84,20 +84,6 @@ spring:
               args:
                 name: vc-api-fallback
                 fallbackuri: forward:/vcApiFallBack
-        - id: mvc-app
-          uri: http://52.79.174.140:8101/
-          predicates:
-            - Path=/mvc_app/**
-          filters:
-            - CustomAuthFilter
-            - name: RequestSize
-              args: 
-                maxSize : 10000000
-            - name: Hystrix
-              args:
-                name: vc-api-fallback
-                fallbackuri: forward:/vcApiFallBack       
-                
 eureka:
   client:
     register-with-eureka: true
