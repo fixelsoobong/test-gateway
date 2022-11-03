@@ -42,7 +42,7 @@ spring:
                 name: vc-api-fallback
                 fallbackuri: forward:/vcApiFallBack
         - id: vse_app
-          uri: http://13.124.120.152:8710/
+          uri: http://localhost:8710/
           predicates:
             - Path=/vse_app/**
           filters:            
