@@ -21,7 +21,7 @@ spring:
         - id: mysc_v2
           uri: http://localhost:9998/
           predicates:
-            - Path=/mysc_v2/**
+            - Path=/v2_mysc/**
           filters:
             - CustomAuthFilter
             - name: Hystrix
