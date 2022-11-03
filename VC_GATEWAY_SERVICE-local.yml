@@ -18,7 +18,7 @@ spring:
       httpserver:
         wiretap: true
       routes:
-        - id: msc-v2
+        - id: mysc_v2
           uri: http://127.0.0.1:9998/
           predicates:
             - Path=/mysc_v2/**
