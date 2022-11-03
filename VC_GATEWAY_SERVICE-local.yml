@@ -32,7 +32,7 @@ spring:
               args:
                 name: vc-api-fallback
                 fallbackuri: forward:/vcApiFallBack
-        - id: mysc2-api-instance
+        - id: mysc2-api
           uri: http://localhost:9998
           predicates:
             - Path=/v2_mysc/**
