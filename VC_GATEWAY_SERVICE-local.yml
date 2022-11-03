@@ -19,7 +19,7 @@ spring:
         wiretap: true
       routes:
         - id: mysc-api-instance
-          uri: http://msc-dev.voicecaddie.co.kr/
+          uri: http://localhost:9998/
           predicates:
             - Path=/mysc/**
           filters:
