@@ -6,22 +6,87 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: 
-              - "*"            
+            allowedOrigins:
+              - "*"
+            allow-credentials: true  
             allowedMethods:
               - GET
-              - POST
-      httpclient:
-        wiretap: true
-        connect-timeout: 30000
-        response-timeout: 30s
-      httpserver:
-        wiretap: true
+              - POST              
+        httpclient:
+          connect-timeout: 10000
+          response-timeout: 50s
+          wiretap: true
+        httpserver:
+          wiretap: true
       routes:
+        - id: vcAppApi
+          uri: lb://vcAppApi
+          predicates:
+            - Path=/api/**
+          filters:
+            - CustomAuthFilter
+            - name: CircuitBreaker
+              args:
+                name: vc-api-fallback
+                fallbackuri: forward:/vcApiFallBack
+        - id: demo
+          uri: http://localhost:8710
+          predicates:
+            - Path=/demo/**
+          filters:            
+            - CustomAuthFilter
+            - name: Hystrix
+              args:
+                name: vc-api-fallback
+                fallbackuri: forward:/vcApiFallBack
+        - id: test
+          uri: lb://test
+          predicates:
+            - Path=/test/**
+          filters:            
+            - CustomAuthFilter
+            - name: Hystrix
+              args:
+                name: vc-api-fallback
+                fallbackuri: forward:/vcApiFallBack
+        - id: vse_app
+          uri: http://192.168.0.8:8710/
+          predicates:
+            - Path=/vse_app/**
+          filters:            
+            - CustomNewAuthFilter
+            - name: Hystrix
+              args:
+                name: vc-api-fallback
+                fallbackuri: forward:/vcApiFallBack
+        - id: vc_msc
+          uri: lb://VC-MSC
+          predicates:
+            - Path=/vc_msc/**
+          filters:
+            - RewritePath=/vc_msc/(?<path>.*), /$\{path}
+            - CustomAuthFilter
+            - name: Hystrix
+              args:
+                name: vc-api-fallback
+                fallbackuri: forward:/vcApiFallBack
         - id: mysc-api-instance
-          uri: http://localhost:9998/
+          uri: http://localhost:9998
           predicates:
             - Path=/mysc/**
+          filters:
+            - CustomAuthFilter
+            - name: RequestSize
+              args:
+                maxSize: 50000000
+            - name: Hystrix
+              args:
+                name: vc-api-fallback
+                fallbackuri: forward:/vcApiFallBack         
+        - id: mvc-app
+          uri: http://localhost:8101/
+          predicates:
+            - Path=/mvc_app/**
           filters:
             - CustomAuthFilter
             - name: RequestSize
@@ -30,25 +95,13 @@ spring:
             - name: Hystrix
               args:
                 name: vc-api-fallback
-                fallbackuri: forward:/vcApiFallBack
-        - id: vse_app
-          uri: http://localhost:8710/
-          predicates:
-            - Path=/vse_app/**
-          filters:            
-            - CustomNewAuthFilter
-            - name: RequestSize
-              args: 
-                maxSize : 7000000
-            - name: Hystrix
-              args:
-                name: vc-api-fallback
-                fallbackuri: forward:/vcApiFallBack
+                fallbackuri: forward:/vcApiFallBack 
+        
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone : http://admin:admin@172.31.5.58:8761/eureka/
+      defaultZone : http://admin:admin@localhost:8761/eureka/
   instance:
     hostname: localhost
